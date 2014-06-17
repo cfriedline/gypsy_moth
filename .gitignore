@@ -11,3 +11,4 @@ ipcontroller*
 test*.ipynb
 .nfs*
 *.pyc
+*.orig

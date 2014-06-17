@@ -1,7 +1,11 @@
 {
  "metadata": {
   "name": "",
+<<<<<<< HEAD
   "signature": "sha256:ad5b91644c1f6d98eec422e523072b5c56b4d450b3b07b1e668f68c74fdbc741"
+=======
+  "signature": "sha256:c27cae8d82a2556124c33c5402a35f9882b7e6c2207a9835248382d6e82ba54e"
+>>>>>>> origin/master
  },
  "nbformat": 3,
  "nbformat_minor": 0,
@@ -1849,7 +1853,11 @@
       "                        axis=1, \n",
       "                        join=\"inner\")\n",
       "concat_data.columns = [x.replace(\" \", \"_\") for x in concat_data.columns]\n",
+<<<<<<< HEAD
+      "put('concat_data',concat_data)"
+=======
       "store['concat_data'] = concat_data"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -1924,8 +1932,12 @@
       "    from scipy.stats.stats import pearsonr\n",
       "    import traceback\n",
       "    try:\n",
+<<<<<<< HEAD
+      "        df = get(df_path)\n",
+=======
       "        store = pd.HDFStore(store_path)\n",
       "        df = store[df_path]\n",
+>>>>>>> origin/master
       "        df.index = pd.Index([int(x) for x in df.index])\n",
       "        m = pd.concat([get('concat_data'), df], axis=1, join=\"inner\")\n",
       "        ind = \"+\".join([\"PC%d\" % (x+1) for x in xrange(tw_num)])\n",
@@ -1967,6 +1979,10 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "pca_nodes = get_node_children(\"pca\")\n",
+      "len(pca_nodes)"
+=======
       "store.close()"
      ],
      "language": "python",
@@ -1996,6 +2012,7 @@
       "            for dep_var in dep_vars:\n",
       "                bin_model_jobs[node].append(lview.apply_async(fit_model, df_path, locus, dep_var, tw_num))\n",
       "    print node, node_count"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -2006,6 +2023,18 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "def get_bin_nodes(bin_names):\n",
+      "    d = {}\n",
+      "    for name in bin_names:\n",
+      "        name = '/'.join(name.split(\"/\")[0:-1])\n",
+      "        d[name] = get_node_children(name)\n",
+      "    return d\n",
+      "\n",
+      "bin_nodes = get_bin_nodes(bin_names)\n",
+      "for k, v in bin_nodes.items():\n",
+      "    print k, len(v)            "
+=======
       "bin_model_results = {}\n",
       "for k, v in bin_model_jobs.items():\n",
       "    bin_model_results[k] = []\n",
@@ -2016,6 +2045,7 @@
       "            res = j.get()\n",
       "            bin_model_results[k].append(res)\n",
       "    print \"%s: %d/%d\" % (k, ready, len(v))"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -2026,6 +2056,21 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "rc, dview, lview = get_views()\n",
+      "model_jobs = []\n",
+      "dep_vars = [\"Mass\", \"Pupual_Duration\", \"Total_Dev_Time\"]\n",
+      "node_count = 0\n",
+      "for df_path in pca_nodes:\n",
+      "    locus = df_path.split(\"/\")[-1]\n",
+      "    if locus.startswith(\"S\"): #ignore non-loci under the node\n",
+      "        node_count += 1\n",
+      "        if node_count % 1000 == 0:\n",
+      "            print \"at %d\" % node_count\n",
+      "        for dep_var in dep_vars:\n",
+      "            model_jobs.append(lview.apply_async(fit_model, df_path, locus, dep_var, tw_num))\n",
+      "print node_count"
+=======
       "summaries = {}\n",
       "diags = {}\n",
       "params = {}\n",
@@ -2068,6 +2113,7 @@
       "    path=\"model_fit/%s/summary\" % (bin_name)\n",
       "    print path\n",
       "    store[path] = df"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -2078,6 +2124,13 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "ready = 0\n",
+      "for j in model_jobs:\n",
+      "    if j.ready():\n",
+      "        ready += 1\n",
+      "print ready, len(model_jobs)"
+=======
       "for bin_name, df_dict in params.items():\n",
       "    path=\"model_fit/%s/params\" % (bin_name)\n",
       "    print path\n",
@@ -2096,6 +2149,7 @@
       "    path=\"model_fit/%s/diags\" % (bin_name)\n",
       "    print path\n",
       "    store[path] = df"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -2106,10 +2160,49 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "summaries = {}\n",
+      "diags = {}\n",
+      "params = {}\n",
+      "residuals = {}\n",
+      "r_c = {}\n",
+      "r_u = {}\n",
+      "\n",
+      "for i, res in enumerate(model_jobs):\n",
+      "    r = res.get()\n",
+      "    if i % 1000 == 0:\n",
+      "        print \"at %d/%d\" % (i, len(model_jobs))\n",
+      "    p_depvar = r['p_fit'][0]['Dep. Variable:']\n",
+      "    g_depvar = r['g_fit'][0]['Dep. Variable:'] #g_depvar is also the locus that was excluded\n",
+      "\n",
+      "    if len(summaries) == 0:\n",
+      "        summaries = pd.DataFrame(index=r['p_fit'][0].keys())\n",
+      "        diags = pd.DataFrame(index=r['p_fit'][2].keys())\n",
+      "        params = {}\n",
+      "        residuals = pd.DataFrame()\n",
+      "        r_c = pd.DataFrame()\n",
+      "        r_u = pd.DataFrame()\n",
+      "\n",
+      "    summaries[\"%s_p\"% g_depvar] = r['p_fit'][0]\n",
+      "    summaries[\"%s_g\"% g_depvar] = r['g_fit'][0]\n",
+      "\n",
+      "    params[\"%s_p\"% g_depvar] = r['p_fit'][1]\n",
+      "    params[\"%s_g\"% g_depvar] = r['g_fit'][1]\n",
+      "\n",
+      "    diags[\"%s_p\"% g_depvar] = r['p_fit'][2]\n",
+      "    diags[\"%s_g\"% g_depvar] = r['g_fit'][2]\n",
+      "\n",
+      "    residuals[\"%s_%s\" % (g_depvar, p_depvar)] = r['p_fit'][3]\n",
+      "    residuals[\"%s_%s\" % (g_depvar, g_depvar)] = r['g_fit'][3]\n",
+      "\n",
+      "    r_c.ix[g_depvar, p_depvar] = r['r_c'][0]\n",
+      "    r_u.ix[g_depvar, p_depvar] = r['r_u'][0]"
+=======
       "for bin_name, df in residuals.items():\n",
       "    path=\"model_fit/%s/residuals\" % (bin_name)\n",
       "    print path\n",
       "    store[path] = df"
+>>>>>>> origin/master
      ],
      "language": "python",
      "metadata": {},
@@ -2120,6 +2213,15 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [
+<<<<<<< HEAD
+      "put('model_fit/pca_all/summary',summaries)\n",
+      "put('model_fit/pca_all/diags',diags)\n",
+      "put('model_fit/pca_all/params', pd.Panel(params))\n",
+      "put('model_fit/pca_all/residuals',residuals)\n",
+      "put('model_fit/pca_all/r_c', r_c)\n",
+      "put('model_fit/pca_all/r_u', r_u)"
+     ],
+=======
       "store['model_fit/pca_bin/bin_10/summary']"
      ],
      "language": "python",
@@ -2131,6 +2233,30 @@
      "cell_type": "code",
      "collapsed": false,
      "input": [],
+>>>>>>> origin/master
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": ""
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "rc, dview, lview = get_views()\n",
+      "bin_model_jobs = {}\n",
+      "dep_vars = [\"Mass\", \"Pupual_Duration\", \"Total_Dev_Time\"]\n",
+      "for node, children in bin_nodes.items():\n",
+      "    node_count = 0\n",
+      "    bin_model_jobs[node] = []\n",
+      "    for df_path in children:\n",
+      "        locus = df_path.split(\"/\")[-1]\n",
+      "        if locus.startswith(\"S\"): #ignore the df node\n",
+      "            node_count += 1\n",
+      "            for dep_var in dep_vars:\n",
+      "                bin_model_jobs[node].append(lview.apply_async(fit_model, df_path, locus, dep_var, tw_num))\n",
+      "    print node, node_count"
+     ],
      "language": "python",
      "metadata": {},
      "outputs": [],

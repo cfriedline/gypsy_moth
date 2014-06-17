@@ -10,3 +10,4 @@ iengine*
 ipcontroller*
 test*.ipynb
 .nfs*
+*.pyc

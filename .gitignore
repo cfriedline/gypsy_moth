@@ -14,3 +14,4 @@ test*.ipynb
 *.orig
 *.pdf
 *sqlite*
+*.hd5

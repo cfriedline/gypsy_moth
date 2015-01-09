@@ -15,3 +15,4 @@ test*.ipynb
 *.pdf
 *sqlite*
 *.hd5
+*.Rdata

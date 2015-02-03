@@ -16,3 +16,4 @@ test*.ipynb
 *sqlite*
 *.hd5
 *.Rdata
+squat*

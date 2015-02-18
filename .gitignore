@@ -17,3 +17,4 @@ test*.ipynb
 *.hd5
 *.Rdata
 squat*
+*.dill

@@ -18,3 +18,4 @@ test*.ipynb
 *.Rdata
 squat*
 *.dill
+*.zip

@@ -20,3 +20,6 @@ squat*
 *.dill
 *.zip
 db
+*.gz
+*.bgl
+*.r2

@@ -1,15 +1,16 @@
 
 library(SNPassoc)
 
-d = read.table('pheno_gt_base_pca_snpassoc.txt', sep="\t", row.names=1, header=T)
+d = read.table('phased_snpassoc.txt', sep="\t", row.names=1, header=T)
 
 #subtract b/c those are the PCA axes
-snp_cols = 4:(ncol(d)-10)
+snp_cols = 4:(ncol(d)-12)
 snp_data = setupSNP(d, colSNPs=snp_cols, sep="/")
-pca_cols = (ncol(d)-9):ncol(d)
+pca_cols = (ncol(d)-11):ncol(d)
 pca_data = d[,pca_cols]
 
-wg = WGassociation(Mass~1+pca_data$PC1+pca_data$PC2+pca_data$PC3+pca_data$PC4+pca_data$PC5+pca_data$PC6+pca_data$PC7+pca_data$PC8+pca_data$PC9+pca_data$PC10, data=snp_data, model="co", genotypingRate=5)
-saveRDS(wg, "wg_mass_co.rds")
+wg = WGassociation(Mass~1+pca_data$PC1+pca_data$PC2+pca_data$PC3+pca_data$PC4+pca_data$PC5+pca_data$PC6+pca_data$PC7+pca_data$PC8+pca_data$PC9+pca_data$PC10+pca_data$PC11+pca_data$PC12, data=snp_data, model="co")
+
+saveRDS(wg, "phased_wg_mass_co.rds")
 stats = WGstats(wg)
-saveRDS(stats, "wgstats_mass.rds")
+saveRDS(stats, "phased_wgstats_mass.rds")

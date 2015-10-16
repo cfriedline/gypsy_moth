@@ -1,3 +1,5 @@
+core*
+*.session
 .idea
 .ipynb_checkpoints
 *.log

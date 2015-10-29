@@ -11,7 +11,6 @@ class HDFStoreHelper:
             s.remove(path)
         s[path] = obj
         s.close()
-    
 
     def get(self, path):
         s = HDFStore(self.path)
@@ -46,5 +45,8 @@ class HDFStoreHelper:
         s.close()
         return children
 
- 
- 
+    def get_group_names(self):
+        s = HDFStore(self.path)
+        names = [str(x) for x in s.groups()]
+        s.close()
+        return names

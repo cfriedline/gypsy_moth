@@ -29,7 +29,7 @@ class HDFStoreHelper:
         s.close()
         return val
 
-    def remove(path):
+    def remove(self, path):
         s = HDFStore(self.path)
         if path in s:
             print "removing %s" % path

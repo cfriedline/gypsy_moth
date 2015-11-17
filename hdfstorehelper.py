@@ -4,7 +4,13 @@ class HDFStoreHelper:
     def __init__(self, path):
         self.path = path
 
-    def put(self, path, obj):
+    def __getitem__(self, item):
+        return self._get(item)
+
+    def __setitem__(self, key, value):
+        self._put(key, value)
+
+    def _put(self, path, obj):
         s = HDFStore(self.path)
         if path in s:
             print "updating %s" % path
@@ -12,7 +18,7 @@ class HDFStoreHelper:
         s[path] = obj
         s.close()
 
-    def get(self, path):
+    def _get(self, path):
         s = HDFStore(self.path)
         d = None
         if path in s:

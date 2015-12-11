@@ -1,6 +1,8 @@
 from pandas import HDFStore
 
+
 class HDFStoreHelper:
+
     def __init__(self, path):
         self.path = path
 
@@ -15,7 +17,10 @@ class HDFStoreHelper:
         if path in s:
             print "updating %s" % path
             s.remove(path)
+            s.close()
+        s = HDFStore(self.path)
         s[path] = obj
+        s.flush(fsync=True)
         s.close()
 
     def _get(self, path):
@@ -25,7 +30,6 @@ class HDFStoreHelper:
             d = s[path]
         s.close()
         return d
-
 
     def in_store(self, path):
         s = HDFStore(self.path)
@@ -40,9 +44,10 @@ class HDFStoreHelper:
         if path in s:
             print "removing %s" % path
             s.remove(path)
+            s.flush(fsync=True)
         s.close()
 
-    def get_children_paths(self, node_path): 
+    def get_children_paths(self, node_path):
         s = HDFStore(self.path)
         node = s.get_node(node_path)
         children = []
@@ -53,6 +58,6 @@ class HDFStoreHelper:
 
     def get_group_names(self):
         s = HDFStore(self.path)
-        names = [str(x) for x in s.groups()]
+        names = s.keys()
         s.close()
         return names

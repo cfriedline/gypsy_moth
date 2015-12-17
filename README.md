@@ -1,1 +1,3 @@
-gypsy_moth
+## Gypsy moth
+
+IPython notebooks and associated files

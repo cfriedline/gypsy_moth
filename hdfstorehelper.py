@@ -15,7 +15,7 @@ class HDFStoreHelper:
     def _put(self, path, obj):
         s = HDFStore(self.path)
         if path in s:
-            print "updating %s" % path
+            print("updating %s" % path)
             s.remove(path)
             s.close()
         s = HDFStore(self.path)
@@ -42,7 +42,7 @@ class HDFStoreHelper:
     def remove(self, path):
         s = HDFStore(self.path)
         if path in s:
-            print "removing %s" % path
+            print("removing %s" % path)
             s.remove(path)
             s.flush(fsync=True)
         s.close()

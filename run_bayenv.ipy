@@ -1,0 +1,23 @@
+
+import psutil
+import numpy as np
+import sys
+import os
+
+def get_free_cpu():
+    procs = {}
+    affinities = set()
+    possible_cpus = set(range(30))
+    for proc in psutil.process_iter():
+        try:
+           if proc.username() == 'cfriedline' and proc.name() == 'bayenv2':
+            procs[proc.pid] = proc.cpu_affinity()
+            [affinities.add(x) for x in proc.cpu_affinity()]
+        except psutil.NoSuchProcess:
+            pass
+    available_cpus = possible_cpus.difference(affinities)
+    return np.random.choice(list(available_cpus))
+
+cmd = "taskset -c %d %s" % (get_free_cpu(), sys.argv[1])
+print(cmd)
+!{cmd}

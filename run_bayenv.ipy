@@ -3,6 +3,7 @@ import psutil
 import numpy as np
 import sys
 import os
+import time
 
 def get_free_cpu():
     procs = {}
@@ -18,6 +19,10 @@ def get_free_cpu():
         except psutil.NoSuchProcess:
             pass
     available_cpus = possible_cpus.difference(affinities)
+    if len(available_cpus) == 0:
+        print("no cpus available.  trying again...")
+        time.sleep(1)
+        return(get_free_cpu())
     return np.random.choice(list(available_cpus))
 
 cmd = "numactl --physcpubind=%d %s" % (get_free_cpu(), sys.argv[1])

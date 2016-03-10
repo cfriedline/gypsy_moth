@@ -1,2 +1,8 @@
-godel_upload:
-	rsync -avz --exclude .git --exclude .ipynb_checkpoints -e ssh . godel:~/ipynb/gypsy_moth
+docker_build:
+	docker build -t box .
+
+docker_bash:
+	docker run -it box bash
+
+docker_notebook:
+	docker run --name notebook -P box

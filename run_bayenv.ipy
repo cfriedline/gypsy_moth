@@ -9,7 +9,11 @@ def get_free_cpu():
     procs = {}
     affinities = set()
     cpus = !cat /proc/cpuinfo | grep processor | wc -l
-    cpus = int(cpus[0])
+    print("cpus = %s" % cpus)
+    try:
+        cpus = int(cpus[0])
+    except ValueError as e:
+        cpus = int(cpus[2]) #account for stupd cluster error with BASH_FUNC_module
     possible_cpus = set(range(cpus))
     for proc in psutil.process_iter():
         try:

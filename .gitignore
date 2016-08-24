@@ -29,3 +29,8 @@ squat/
 squat.r
 !freeze.txt
 *.xlsx
+*.png
+*.html
+*.tif
+*.tiff
+*.pdf
